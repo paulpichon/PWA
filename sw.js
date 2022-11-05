@@ -1,10 +1,34 @@
 //En lugar de WINDOW se usa SELF
 
+//varaible para cache
+const nombreCache = 'apv-v1';
+
+//variable que servira para cachear archivos
+const archivos = [
+    '/',
+    '/index.html',
+    '/css/bootstrap.css',
+    '/css/styles.css',
+    '/js/app.js',
+    '/js/apv.js'
+];
+
+
 //cuando se instala el service worker
 //se actiav una sola vez al momento de registrar el service worker
 self.addEventListener('install', e => {
     console.log('instalado el service worker');
-    console.log( e );
+
+    //cachear los archivos
+    e.waitUntil(
+        caches.open(nombreCache)
+            .then( cache => {
+                console.log("cacheando");
+                //addAll() es para agregar un arreglo de archivos, si fuera solo 1 seria, add()
+                cache.addAll(archivos);
+            })
+    );
+
 });
 
 //activar el service worker
