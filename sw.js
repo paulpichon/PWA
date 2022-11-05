@@ -20,6 +20,7 @@ self.addEventListener('install', e => {
     console.log('instalado el service worker');
 
     //cachear los archivos
+    //waitUntil va a esperar hasta que se descargen todos los archivos 
     e.waitUntil(
         caches.open(nombreCache)
             .then( cache => {
@@ -41,4 +42,14 @@ self.addEventListener('activate', e => {
 //evento fetch para descargar archivos estaticos
 self.addEventListener('fetch', e => {
     console.log('fetch', e);
+
+    //archivos estaticos
+    e.respondWith(
+        //revisar el tipo de request
+        caches.match( e.request )
+            .then( respuestCache => {
+                return respuestCache;
+            })
+    )
+
 });
