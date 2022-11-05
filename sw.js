@@ -7,6 +7,7 @@ const nombreCache = 'apv-v1';
 const archivos = [
     '/',
     '/index.html',
+    '/error.html',
     '/css/bootstrap.css',
     '/css/styles.css',
     '/js/app.js',
@@ -45,11 +46,10 @@ self.addEventListener('fetch', e => {
 
     //archivos estaticos
     e.respondWith(
-        //revisar el tipo de request
-        caches.match( e.request )
-            .then( respuestCache => {
-                return respuestCache;
-            })
+        caches.match(e.request)
+        //en caso de buscar una pagina que necesite internet lo que hara es mostrar error.html
+            .then(cacheResponse => (cacheResponse ? cacheResponse : caches.match('error.html')))
+        
     )
 
 });
