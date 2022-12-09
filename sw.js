@@ -1,7 +1,7 @@
 //En lugar de WINDOW se usa SELF
 
 //varaible para cache
-const nombreCache = 'apv-v1';
+const nombreCache = 'apv-v5';
 
 //variable que servira para cachear archivos
 const archivos = [
@@ -37,7 +37,22 @@ self.addEventListener('install', e => {
 self.addEventListener('activate', e => {
     console.log("service worker activado");
 
-    console.log( e );
+    //actualizar a la nueva version, detectar cambios en los archivos
+    e.waitUntil(
+        caches.keys()
+            .then( keys => {
+                //console.log( keys );
+
+                return Promise.all(
+
+                    keys.filter( key => key !== nombreCache )
+                        //eliminar las versiones diferentes a la actual, versiones anteriores
+                        .map( key => caches.delete( key ) )
+                )
+
+            })
+    )
+
 });
 
 //evento fetch para descargar archivos estaticos
